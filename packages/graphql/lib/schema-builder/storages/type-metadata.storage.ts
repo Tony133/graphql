@@ -2,7 +2,7 @@ import { Type } from '@nestjs/common';
 import { isUndefined } from '@nestjs/common/utils/shared.utils';
 import { addFieldMetadata } from '../../decorators';
 import { METADATA_FACTORY_NAME } from '../../plugin/plugin-constants';
-import { MetadataByTargetCollection } from '../collections/';
+import { MetadataByTargetCollection } from '../collections';
 import { CannotDetermineHostTypeError } from '../errors/cannot-determine-host-type.error';
 import { UndefinedTypeError } from '../errors/undefined-type.error';
 import {

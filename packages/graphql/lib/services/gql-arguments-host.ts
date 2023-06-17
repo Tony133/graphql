@@ -1,6 +1,9 @@
 import { ArgumentsHost } from '@nestjs/common';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 
+/**
+ * @publicApi
+ */
 export interface GraphQLArgumentsHost extends ArgumentsHost {
   getRoot<T = any>(): T;
   getInfo<T = any>(): T;
@@ -8,6 +11,9 @@ export interface GraphQLArgumentsHost extends ArgumentsHost {
   getContext<T = any>(): T;
 }
 
+/**
+ * @publicApi
+ */
 export class GqlArgumentsHost
   extends ExecutionContextHost
   implements GraphQLArgumentsHost

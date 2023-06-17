@@ -1,4 +1,4 @@
-import { FieldDirectiveCollection } from '../../../lib/schema-builder/collections/';
+import { FieldDirectiveCollection } from '../../../lib/schema-builder/collections';
 import { PropertyDirectiveMetadata } from '../../../lib/schema-builder/metadata';
 
 describe('FieldDirectiveCollection', () => {

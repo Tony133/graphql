@@ -41,31 +41,31 @@ let tsMorphLib: typeof import('ts-morph') | undefined;
 export interface DefinitionsGeneratorOptions {
   /**
    * If true, the additional "__typename" field is generated for every object type.
-   * @default false
+   * By default is false
    */
   emitTypenameField?: boolean;
 
   /**
    * If true, resolvers (query/mutation/etc) are generated as plain fields without arguments.
-   * @default false
+   * By default is false
    */
   skipResolverArgs?: boolean;
 
   /**
    * If provided, specifies a default generated TypeScript type for custom scalars.
-   * @default 'any'
+   * By default is 'any'
    */
   defaultScalarType?: string;
 
   /**
    * If provided, specifies a mapping of types to use for custom scalars
-   * @default undefined
+   * By default is undefined
    */
   customScalarTypeMapping?: Record<string, string | { name: string }>;
 
   /**
    * If provided, specifies a mapping of default scalar types (Int, Boolean, ID, Float, String).
-   * @default undefined
+   * By default is undefined
    */
   defaultTypeMapping?: Partial<
     Record<'ID' | 'Boolean' | 'Float' | 'String' | 'Int', string>
@@ -74,13 +74,13 @@ export interface DefinitionsGeneratorOptions {
   /**
    * If provided, specifies a custom header to add after the
    * to the output file (eg. for custom type imports or comments)
-   * @default undefined
+   * By default is undefined
    */
   additionalHeader?: string;
 
   /**
    * If true, enums are generated as string literal union types.
-   * @default false
+   * by default is false
    */
   enumsAsTypes?: boolean;
 }

@@ -10,12 +10,12 @@ export interface Federation2Config {
   version: 2;
   /**
    * The imported directives
-   * @default ['@composeDirective', '@extends', '@external', '@inaccessible', '@interfaceObject', '@key', '@override', '@provides', '@requires', '@shareable', '@tag']
+   * by default ['@composeDirective', '@extends', '@external', '@inaccessible', '@interfaceObject', '@key', '@override', '@provides', '@requires', '@shareable', '@tag']
    */
   directives?: (string | AliasDirectiveImport)[];
   /**
    * The import link
-   * @default 'https://specs.apollo.dev/federation/v2.3'
+   * by default 'https://specs.apollo.dev/federation/v2.3'
    */
   importUrl?: string;
 }
@@ -24,7 +24,7 @@ export interface SchemaFileConfig {
   /**
    * Federation version and its configuration,
    *
-   * @default 1
+   * by default 1
    */
   federation?: FederationVersion | FederationConfig;
 

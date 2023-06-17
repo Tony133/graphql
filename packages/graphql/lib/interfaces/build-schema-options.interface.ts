@@ -12,13 +12,13 @@ export interface ScalarsTypeMap {
 export interface BuildSchemaOptions {
   /**
    * Date scalar mode
-   * @default 'isoDate'
+   * by default is 'isoDate'
    */
   dateScalarMode?: DateScalarMode;
 
   /**
    * Number scalar mode
-   * @default 'float'
+   * by default is 'float'
    */
   numberScalarMode?: NumberScalarMode;
 

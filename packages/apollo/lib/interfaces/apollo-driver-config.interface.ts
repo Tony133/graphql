@@ -7,6 +7,9 @@ import {
   SubscriptionConfig,
 } from '@nestjs/graphql';
 
+/**
+ *  @publicApi
+ */
 export interface ServerRegistration {
   /**
    * Path to mount GraphQL API
@@ -14,6 +17,9 @@ export interface ServerRegistration {
   path?: string;
 }
 
+/**
+ *  @publicApi
+ */
 export interface ApolloDriverConfig
   extends Omit<
       ApolloServerOptionsWithTypeDefs<any>,
@@ -39,7 +45,7 @@ export interface ApolloDriverConfig
   /**
    * If enabled, will register a global interceptor that automatically maps
    * "HttpException" class instances to corresponding Apollo errors.
-   * @default true
+   * By default is true
    */
   autoTransformHttpErrors?: boolean;
 }
