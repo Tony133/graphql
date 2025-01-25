@@ -17,7 +17,7 @@ import { addResolverMetadata } from './resolvers.utils';
  * 
  * Interface defining options that can be passed to `@Mutation()` decorator.
  */
-export interface MutationOptions extends BaseTypeOptions {
+export type MutationOptions<T = any> = BaseTypeOptions<T> & {
   /**
    * Name of the mutation.
    */
@@ -34,7 +34,7 @@ export interface MutationOptions extends BaseTypeOptions {
    * Mutation complexity options.
    */
   complexity?: Complexity;
-}
+};
 
 /**
  * @publicApi
@@ -66,7 +66,7 @@ export function Mutation(
   nameOrType?: string | ReturnTypeFunc,
   options: MutationOptions = {},
 ): MethodDecorator {
-  return (target: Object | Function, key?: string, descriptor?: any) => {
+  return (target: object | Function, key?: string, descriptor?: any) => {
     const name = isString(nameOrType)
       ? nameOrType
       : (options && options.name) || undefined;

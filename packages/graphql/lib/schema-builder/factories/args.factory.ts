@@ -7,10 +7,14 @@ import { getDefaultValue } from '../helpers/get-default-value.helper';
 import { ClassMetadata, MethodArgsMetadata } from '../metadata';
 import { TypeMetadataStorage } from '../storages/type-metadata.storage';
 import { InputTypeFactory } from './input-type.factory';
+import { AstDefinitionNodeFactory } from './ast-definition-node.factory';
 
 @Injectable()
 export class ArgsFactory {
-  constructor(private readonly inputTypeFactory: InputTypeFactory) {}
+  constructor(
+    private readonly inputTypeFactory: InputTypeFactory,
+    private readonly astDefinitionNodeFactory: AstDefinitionNodeFactory,
+  ) {}
 
   public create(
     args: MethodArgsMetadata[],
@@ -21,6 +25,7 @@ export class ArgsFactory {
       if (param.kind === 'arg') {
         fieldConfigMap[param.name] = {
           description: param.description,
+          deprecationReason: param.deprecationReason,
           type: this.inputTypeFactory.create(
             param.name,
             param.typeFn(),
@@ -73,15 +78,26 @@ export class ArgsFactory {
       );
 
       const { schemaName } = field;
+      const type = this.inputTypeFactory.create(
+        field.name,
+        field.typeFn(),
+        options,
+        field.options,
+      );
       fieldConfigMap[schemaName] = {
         description: field.description,
-        type: this.inputTypeFactory.create(
-          field.name,
-          field.typeFn(),
-          options,
-          field.options,
-        ),
+        deprecationReason: field.deprecationReason,
+        type,
         defaultValue: field.options.defaultValue,
+        /**
+         * AST node has to be manually created in order to define directives
+         * (more on this topic here: https://github.com/graphql/graphql-js/issues/1343)
+         */
+        astNode: this.astDefinitionNodeFactory.createArgNode(
+          field.name,
+          type,
+          field.directives,
+        ),
       };
     });
   }

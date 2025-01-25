@@ -16,7 +16,7 @@ import { addResolverMetadata } from './resolvers.utils';
  * 
  * @publicApi
  */
-export interface SubscriptionOptions extends BaseTypeOptions {
+export type SubscriptionOptions<T = any> = BaseTypeOptions<T> & {
   /**
    * Name of the subscription.
    */
@@ -45,8 +45,9 @@ export interface SubscriptionOptions extends BaseTypeOptions {
     args: any,
     context: any,
     info: any,
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   ) => any | Promise<any>;
-}
+};
 
 /**
  * @publicApi

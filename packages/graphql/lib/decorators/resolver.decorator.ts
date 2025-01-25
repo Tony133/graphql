@@ -101,7 +101,7 @@ export function Resolver(
   options?: ResolverOptions,
 ): MethodDecorator & ClassDecorator {
   return (
-    target: Object | Function,
+    target: object | Function,
     key?: string | symbol,
     descriptor?: any,
   ) => {
@@ -120,6 +120,7 @@ export function Resolver(
       const objectName = getObjectOrInterfaceTypeNameIfExists(
         nameOrType as Function,
       );
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       objectName && (name = objectName);
     }
     addResolverMetadata(undefined, name, target, key, descriptor);

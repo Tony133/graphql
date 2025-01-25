@@ -21,7 +21,7 @@ import { reflectTypeFromMetadata } from '../utils/reflection.utilts';
  * 
  * Interface defining options that can be passed to `@ResolveField()` decorator.
  */
-export interface ResolveFieldOptions extends BaseTypeOptions {
+export type ResolveFieldOptions<T = any> = BaseTypeOptions<T> & {
   /**
    * Name of the field.
    */
@@ -42,7 +42,7 @@ export interface ResolveFieldOptions extends BaseTypeOptions {
    * Array of middleware to apply.
    */
   middleware?: FieldMiddleware[];
-}
+};
 
 /**
  * @publicApi
@@ -94,12 +94,12 @@ export function ResolveField(
 
     options = isObject(options)
       ? {
-          name: propertyName as string,
+          name: propertyName,
           ...options,
         }
       : propertyName
-      ? { name: propertyName as string }
-      : {};
+        ? { name: propertyName }
+        : {};
 
     LazyMetadataStorage.store(target.constructor as Type<unknown>, () => {
       let typeOptions: TypeOptions, typeFn: (type?: any) => GqlTypeReference;
@@ -113,7 +113,9 @@ export function ResolveField(
         });
         typeOptions = implicitTypeMetadata.options;
         typeFn = implicitTypeMetadata.typeFn;
-      } catch {}
+      } catch {
+        /* empty */
+      }
 
       TypeMetadataStorage.addResolverPropertyMetadata({
         kind: 'external',
@@ -122,9 +124,9 @@ export function ResolveField(
         target: target.constructor,
         typeFn,
         typeOptions,
-        description: (options as ResolveFieldOptions).description,
-        deprecationReason: (options as ResolveFieldOptions).deprecationReason,
-        complexity: (options as ResolveFieldOptions).complexity,
+        description: options.description,
+        deprecationReason: options.deprecationReason,
+        complexity: options.complexity,
       });
     });
   };

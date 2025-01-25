@@ -1,4 +1,4 @@
-import { mergeSchemas } from '@graphql-tools/schema';
+import { mergeSchemas, addResolversToSchema } from '@graphql-tools/schema';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 import { Injectable } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
@@ -81,14 +81,20 @@ export class GraphQLFederationFactory {
         require('@apollo/subgraph'),
       );
 
-    return buildSubgraphSchema([
-      {
-        typeDefs: gql`
-          ${options.typeDefs}
-        `,
-        resolvers: this.getResolvers(options.resolvers),
-      },
-    ]);
+    const resolvers = this.getResolvers(options.resolvers);
+    return addResolversToSchema({
+      resolverValidationOptions: options.resolverValidationOptions,
+      inheritResolversFromInterfaces: options.inheritResolversFromInterfaces,
+      resolvers,
+      schema: buildSubgraphSchema([
+        {
+          typeDefs: gql`
+            ${options.typeDefs}
+          `,
+          resolvers,
+        },
+      ]),
+    });
   }
 
   private async generateSchemaFromCodeFirst<T extends GqlModuleOptions>(
@@ -136,9 +142,15 @@ export class GraphQLFederationFactory {
       typeDefs = typeDefsDecorator.decorate(typeDefs, federationOptions);
     }
 
-    let executableSchema: GraphQLSchema = buildFederatedSchema({
-      typeDefs: gql(typeDefs),
-      resolvers: this.getResolvers(options.resolvers),
+    const resolvers = this.getResolvers(options.resolvers);
+    let executableSchema: GraphQLSchema = addResolversToSchema({
+      schema: buildFederatedSchema({
+        typeDefs: gql(typeDefs),
+        resolvers,
+      }),
+      resolvers,
+      resolverValidationOptions: options.resolverValidationOptions,
+      inheritResolversFromInterfaces: options.inheritResolversFromInterfaces,
     });
 
     executableSchema = this.overrideOrExtendResolvers(

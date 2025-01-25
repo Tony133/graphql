@@ -18,7 +18,7 @@ import { addPipesMetadata } from './param.utils';
  * 
  * Interface defining options that can be passed to `@Args()` decorator.
  */
-export interface ArgsOptions extends BaseTypeOptions {
+export type ArgsOptions<T = any> = BaseTypeOptions<T> & {
   /**
    * Name of the argument.
    */
@@ -28,10 +28,14 @@ export interface ArgsOptions extends BaseTypeOptions {
    */
   description?: string;
   /**
+   * Argument deprecation reason (if deprecated).
+   */
+  deprecationReason?: string;
+  /**
    * Function that returns a reference to the arguments host class.
    */
   type?: () => any;
-}
+};
 
 /**
  * @publicApi
@@ -106,7 +110,7 @@ export function Args(
     pipes,
   );
 
-  return (target: Object, key: string, index: number) => {
+  return (target: object, key: string, index: number) => {
     addPipesMetadata(GqlParamtype.ARGS, property, argPipes, target, key, index);
 
     LazyMetadataStorage.store(target.constructor as Type<unknown>, () => {
@@ -132,6 +136,7 @@ export function Args(
           kind: 'arg',
           name: property,
           description: argOptions.description,
+          deprecationReason: argOptions.deprecationReason,
           ...metadata,
         });
       } else {

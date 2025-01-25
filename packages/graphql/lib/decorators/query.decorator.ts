@@ -17,7 +17,7 @@ import { addResolverMetadata } from './resolvers.utils';
  * 
  * @publicApi
  */
-export interface QueryOptions extends BaseTypeOptions {
+export type QueryOptions<T = any> = BaseTypeOptions<T> & {
   /**
    * Name of the query.
    */
@@ -34,7 +34,7 @@ export interface QueryOptions extends BaseTypeOptions {
    * Query complexity options.
    */
   complexity?: Complexity;
-}
+};
 
 /**
  * @publicApi
@@ -66,7 +66,7 @@ export function Query(
   nameOrType?: string | ReturnTypeFunc,
   options: QueryOptions = {},
 ): MethodDecorator {
-  return (target: Object | Function, key?: string, descriptor?: any) => {
+  return (target: object | Function, key?: string, descriptor?: any) => {
     const name = isString(nameOrType)
       ? nameOrType
       : (options && options.name) || undefined;

@@ -13,7 +13,10 @@ import { ClassMetadata, PropertyMetadata } from '../metadata';
 import { LazyMetadataStorage } from '../storages/lazy-metadata.storage';
 import { TypeMetadataStorage } from '../storages/type-metadata.storage';
 
-export function getFieldsAndDecoratorForType<T>(objType: Type<T>) {
+export function getFieldsAndDecoratorForType<T>(
+  objType: Type<T>,
+  options?: { overrideFields?: boolean },
+) {
   const classType = Reflect.getMetadata(CLASS_TYPE_METADATA, objType);
   if (!classType) {
     throw new UnableToFindFieldsError(objType.name);
@@ -27,13 +30,13 @@ export function getFieldsAndDecoratorForType<T>(objType: Type<T>) {
     getClassMetadataAndFactoryByTargetAndType(classType, objType);
 
   TypeMetadataStorage.loadClassPluginMetadata([classMetadata]);
-  TypeMetadataStorage.compileClassMetadata([classMetadata]);
+  TypeMetadataStorage.compileClassMetadata([classMetadata], options);
 
   let fields = classMetadata?.properties;
   if (!fields) {
     throw new UnableToFindFieldsError(objType.name);
   }
-  fields = inheritClassFields(objType, fields);
+  fields = inheritClassFields(objType, fields, options);
 
   return {
     fields,
@@ -79,6 +82,7 @@ function getClassMetadataAndFactoryByTargetAndType(
 function inheritClassFields(
   objType: Type<unknown>,
   fields: PropertyMetadata[],
+  options?: { overrideFields?: boolean },
 ) {
   try {
     const parentClass = Object.getPrototypeOf(objType);
@@ -87,9 +91,14 @@ function inheritClassFields(
     }
     const { fields: parentFields } = getFieldsAndDecoratorForType(
       parentClass as Type<unknown>,
+      options,
     );
-    return inheritClassFields(parentClass, [...parentFields, ...fields]);
-  } catch (err) {
+    return inheritClassFields(
+      parentClass,
+      [...parentFields, ...fields],
+      options,
+    );
+  } catch {
     return fields;
   }
 }

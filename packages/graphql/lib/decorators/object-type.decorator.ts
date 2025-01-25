@@ -80,7 +80,7 @@ export function ObjectType(
         name: name || target.name,
         target,
         description: parentType?.inheritDescription
-          ? options.description ?? parentType?.description
+          ? (options.description ?? parentType?.description)
           : options.description,
         interfaces: options.implements,
         isAbstract: options.isAbstract,
